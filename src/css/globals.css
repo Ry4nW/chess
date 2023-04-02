@@ -1,0 +1,85 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: sans-serif;
+	margin: 20px;
+	padding: 0;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: sans-serif;
+	margin: 20px;
+	padding: 0;
+}
+
+.square {
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+
+	background: #fff;
+	float: left;
+	font-size: 24px;
+	font-weight: bold;
+	line-height: 34px;
+	height: 91px;
+
+	padding: 0;
+	text-align: center;
+	width: 91px;
+}
+
+.disabled {
+	pointer-events: none;
+}
+
+.black {
+	background: #85531b;
+}
+
+.white {
+	background: rgba(140, 95, 41, 0.5);
+}
+
+div[color="white"] {
+	color: white;
+}
+
+#coordinate {
+	border: none;
+}
+
+.board-row:after {
+	clear: both;
+	content: "";
+	display: table;
+}
+
+.board {
+	width: 819px;
+	height: 819px;
+	margin: auto;
+	margin-left: 30em;
+}
+
+.status {
+	margin-bottom: 10px;
+}
+
+.moveHistory {
+	margin-left: 85em;
+	margin-bottom: 30em;
+}
+
+.legalMark {
+	height: 91px;
+	background: green;
+}
