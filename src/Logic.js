@@ -1,11 +1,10 @@
-const pieces = {
-	Rook: {},
-};
+import { blackPieceNames } from "./data";
+import { whitePieceNames } from "./data";
 
 export function calculateCheckmate(boardState) {}
 
 // Check occupancy of one square
-function checkFree(boardState, position) {
+function checkFree(boardState, position, take = false, pieces = []) {
 	if (
 		position[0] < 0 ||
 		position[0] > 7 ||
@@ -13,8 +12,11 @@ function checkFree(boardState, position) {
 		position[1] > 7
 	)
 		return false;
-	if (boardState[position[0]][position[1]] === "") return true;
-	return false;
+	const cur = boardState[position[0]][position[1]];
+	console.log("aaaa");
+	console.log(boardState);
+	console.log(cur);
+	if ((cur === "" && !take) || (take && pieces.includes(cur))) return true;
 }
 
 // Calculate and display all legal moves of a piece
@@ -35,9 +37,21 @@ export function calculateMoves(position, piece, boardState, color) {
 				}
 				if (checkFree(boardState, [i - 1, j]))
 					legalNextMoves.push([i - 1, j]);
-			// Taking
+
+				// Taking
+				const potentialTakeSquares = [
+					[i - 1, j - 1],
+					[i - 1, j + 1],
+				];
+				potentialTakeSquares.forEach((pair) => {
+					if (checkFree(boardState, pair, true, blackPieceNames)) {
+						legalNextMoves.push(pair);
+					}
+				});
 			default:
 		}
+
+		console.log(legalNextMoves);
 		return legalNextMoves;
 	}
 

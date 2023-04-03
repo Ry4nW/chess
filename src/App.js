@@ -5,7 +5,12 @@ import "./css/globals.css";
 
 import * as pL from "./Logic.js";
 import Piece from "./Piece Sprites/Images.js";
-import { generateKey, startBoard } from "./data";
+import {
+	blackPieceNames,
+	generateKey,
+	startBoard,
+	whitePieceNames,
+} from "./data";
 
 function Row({ rowNumber, squares, onSquareClick }) {
 	let square_rows = [];
@@ -21,6 +26,7 @@ function Row({ rowNumber, squares, onSquareClick }) {
 		let piece;
 		let pieceComp;
 		const curSquare = squares[rowNumber][i];
+		let clsName;
 		if (curSquare.length > 1) {
 			let c;
 			if (curSquare.charAt(0) === "b") {
@@ -31,6 +37,10 @@ function Row({ rowNumber, squares, onSquareClick }) {
 				piece = curSquare;
 			}
 			pieceComp = <Piece piece={piece} color={c}></Piece>;
+			// FIX: div .legalPieceMark causes pieces to disappear when clicked after making a move that takes
+			if (curSquare.charAt(curSquare.length - 1) === "L") {
+				clsName = "legalPieceMark";
+			}
 		} else if (curSquare === "L") {
 			pieceComp = <div className="legalMark"></div>;
 		}
@@ -41,6 +51,7 @@ function Row({ rowNumber, squares, onSquareClick }) {
 				rowNumber={rowNumber}
 				colNumber={i}
 				onSquareClick={() => onSquareClick([rowNumber, i])}
+				moreClass={clsName}
 			></Square>
 		);
 	}
@@ -61,7 +72,16 @@ function FileNumRow({ rowNumber }) {
 	return squares;
 }
 
-function Square({ rowNumber, colNumber, value, isCoord, onSquareClick }) {
+function Square({
+	rowNumber,
+	colNumber,
+	value,
+	isCoord,
+	onSquareClick,
+	moreClass,
+}) {
+	let pieceMark;
+	if (moreClass) pieceMark = <div className={moreClass}></div>;
 	if (!isCoord) {
 		const clsName = !((rowNumber + colNumber - 2) % 2 !== 0)
 			? "square white"
@@ -69,6 +89,7 @@ function Square({ rowNumber, colNumber, value, isCoord, onSquareClick }) {
 		return (
 			<button className={clsName} onClick={onSquareClick}>
 				{value}
+				{pieceMark}
 			</button>
 		);
 	}
@@ -137,7 +158,8 @@ function Board({
 			);
 			for (let k = 0; k < moves.length; k++) {
 				const curPos = moves[k];
-				squares[curPos[0]][curPos[1]] = "L";
+				squares[curPos[0]][curPos[1]] =
+					squares[curPos[0]][curPos[1]].concat("L");
 			}
 			handleLegalMoves(moves, position, true);
 			toBeLeft = position;
@@ -146,7 +168,10 @@ function Board({
 			// console.log(position);
 		} else if (isHoldingPiece) {
 			console.log("a");
-			if (squares[i][j] === "L") {
+			if (
+				squares[i][j] === "L" ||
+				squares[i][j].charAt(squares[i][j].length - 1) === "L"
+			) {
 				squares[i][j] = squares[toBeLeft[0]][toBeLeft[1]];
 				squares[toBeLeft[0]][toBeLeft[1]] = "";
 				isHoldingPiece = false;

@@ -13,10 +13,14 @@ import whitequeen from "./white_queen.png";
 import whiterook from "./white_rook.png";
 
 export default function Piece({ piece, color }) {
+	const pieceName =
+		piece[piece.length - 1] === "L"
+			? piece.slice(0, piece.length - 1)
+			: piece;
 	return (
 		<div className="piece" color={color}>
 			<img
-				src={require(`./${color}_${piece.toLowerCase()}.png`)}
+				src={require(`./${color}_${pieceName.toLowerCase()}.png`)}
 				alt="A chess piece"
 				height="75"
 				width="75"
